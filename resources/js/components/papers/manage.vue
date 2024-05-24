@@ -73,9 +73,11 @@ import Swal from 'sweetalert2';
                 local_paper_name : '',
                 paper_id : '',
                 loading : false,
+                token : localStorage.getItem('token')
             }
         },
         mounted() {
+            this.token = localStorage.getItem('token')
             this.fecthData();
         },
 
@@ -84,7 +86,13 @@ import Swal from 'sweetalert2';
         },
         methods:{
             editsubject(id){
-                axios.get('/api/papers/edit/'+id).then((response)=>{
+                axios.get('/api/papers/edit/'+id,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.token}`
+                        }
+                    }
+                ).then((response)=>{
                     this.local_paper_name = response.data.name;
                     this.paper_id = response.data.id
                     $('#editModal').modal('show')
@@ -104,7 +112,13 @@ import Swal from 'sweetalert2';
                 //         Swal.showLoading()
                 //     }
                 // })
-                axios.get('/api/papers/list').then((response)=>{
+                axios.get('/api/papers/list',
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.token}`
+                        }
+                    }
+                ).then((response)=>{
                     // console.log(response);
                     this.list = response.data
 
@@ -115,7 +129,13 @@ import Swal from 'sweetalert2';
 
             },
             deletesubject (id){
-                axios.delete('/api/papers/delete/'+id).then((response)=>{
+                axios.delete('/api/papers/delete/'+id,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${this.token}`
+                        }
+                    }
+                ).then((response)=>{
                     // show sweetalert message
                     Swal.fire(
                         'Deleted!',

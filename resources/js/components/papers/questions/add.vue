@@ -101,10 +101,12 @@
         data() {
             return {
                 id: this.$route.params.id,
-                questions : []
+                questions : [],
+                token : localStorage.getItem('token')
             };
         },
         mounted() {
+            this.token = localStorage.getItem('token')
             this.initializeSelect2();
         },
 
@@ -154,8 +156,14 @@
             },
 
             SaveData(){
-                axios.post('/api/papers/questions/add',
-                this.questions
+                axios.post('/api/papers/questions/add',{
+                    questions : this.questions
+                },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.token}`
+                        }
+                    }
                 )
                 .then((response)=>{
                     toastr.success(response.data.message);

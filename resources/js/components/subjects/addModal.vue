@@ -41,11 +41,13 @@ import toastr from 'toastr';
                 },
                 showAddModal: false,
                 isModalOpen: false,
+                token : localStorage.getItem('token'),
                 modalId: null
             }
         },
 
         mounted() {
+            this.token = localStorage.getItem('token')
             $('#show-modal').on('click',function(){
                     $('#addModal').modal('show')
                 }
@@ -56,7 +58,13 @@ import toastr from 'toastr';
         methods: {
             addsubject(){
                 axios.post('/api/subjects/add', {
-                    name: this.subject_name
+
+                    name: this.subject_name,
+
+                },{
+                    headers: {
+                        'Authorization': `Bearer ${this.token}`
+                    }
                 }).then((response)=>{
                     this.subject_name = '';
                     // show toastr success message

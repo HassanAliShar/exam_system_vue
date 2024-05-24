@@ -72,9 +72,11 @@ import Swal from 'sweetalert2';
                 local_subject_name : '',
                 subject_id : '',
                 loading : false,
+                token : localStorage.getItem('token')
             }
         },
         mounted() {
+            this.token = localStorage.getItem('token')
             this.fecthData();
         },
 
@@ -83,7 +85,13 @@ import Swal from 'sweetalert2';
         },
         methods:{
             editsubject(id){
-                axios.get('/api/subjects/edit/'+id).then((response)=>{
+                axios.get('/api/subjects/edit/'+id,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${this.token}`
+                        }
+                    }
+                ).then((response)=>{
                     this.local_subject_name = response.data.name;
                     this.subject_id = response.data.id
                     $('#editModal').modal('show')
@@ -94,16 +102,13 @@ import Swal from 'sweetalert2';
                 return this.item.subject_name
             },
             fecthData(){
-                // create loading sweetalert message
-                // Swal.fire({
-                //     title: 'Loading...',
-                //     allowOutsideClick: false,
-                //     allowEscapeKey: false,
-                //     didOpen: () => {
-                //         Swal.showLoading()
-                //     }
-                // })
-                axios.get('/api/subjects/list').then((response)=>{
+                axios.get('/api/subjects/list',
+                {
+                    headers: {
+                        'Authorization': `Bearer ${this.token}`
+                    }
+                })
+                .then((response)=>{
                     // console.log(response);
                     this.list = response.data
 
@@ -114,7 +119,13 @@ import Swal from 'sweetalert2';
 
             },
             deletesubject (id){
-                axios.delete('/api/subjects/delete/'+id).then((response)=>{
+                axios.delete('/api/subjects/delete/'+id,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${this.token}`
+                        }
+                    }
+                ).then((response)=>{
                     // show sweetalert message
                     Swal.fire(
                         'Deleted!',

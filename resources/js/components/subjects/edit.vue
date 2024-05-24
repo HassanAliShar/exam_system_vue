@@ -37,12 +37,15 @@ export default {
 
   data() {
     return {
-      cat_name:''
+      cat_name:'',
+      token: localStorage.getItem('token'),
     };
   },
     mounted() {
         // Update cat_name when subjectName prop changes
         this.cat_name = this.subjectName;
+
+        this.token = localStorage.getItem('token');
     },
 
     watch: {
@@ -60,6 +63,10 @@ export default {
     updatesubject() {
         axios.post('/api/subjects/update/'+this.id, {
             name: this.cat_name
+        }, {
+            headers: {
+                Authorization: `Bearer ${this.token}`
+            }
         }).then((response)=>{
             this.cat_name = '';
             // show sweetalert message

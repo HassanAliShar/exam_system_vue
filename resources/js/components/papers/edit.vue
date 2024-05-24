@@ -37,10 +37,12 @@ export default {
 
   data() {
     return {
-      paper_name:''
+      paper_name:'',
+      token: localStorage.getItem('token'),
     };
   },
     mounted() {
+        this.token = localStorage.getItem('token')
         // Update paper_name when paperName prop changes
         this.paper_name = this.paperName;
     },
@@ -60,6 +62,10 @@ export default {
     updatepaper() {
         axios.post('/api/papers/update/'+this.id, {
             name: this.paper_name
+        }, {
+            headers: {
+                Authorization: `Bearer ${this.token}`
+            }
         }).then((response)=>{
             this.paper_name = '';
             // show sweetalert message

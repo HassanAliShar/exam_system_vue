@@ -81,9 +81,11 @@ import Swal from 'sweetalert2';
                 paper_id : '',
                 loading : false,
                 paper_id : '',
+                token : localStorage.getItem('token')
             }
         },
         mounted() {
+            this.token = localStorage.getItem('token')
             this.fecthData();
             this.paper_id = this.$route.params.id
         },
@@ -93,7 +95,13 @@ import Swal from 'sweetalert2';
         },
         methods:{
             editsubject(id){
-                axios.get('/api/papers/edit/'+id).then((response)=>{
+                axios.get('/api/papers/edit/'+id,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${this.token}`
+                        }
+                    }
+                ).then((response)=>{
                     this.local_paper_name = response.data.name;
                     this.paper_id = response.data.id
                     $('#editModal').modal('show')
@@ -113,7 +121,13 @@ import Swal from 'sweetalert2';
                 //         Swal.showLoading()
                 //     }
                 // })
-                axios.get('/api/papers/questions/list/'+this.$route.params.id).then((response)=>{
+                axios.get('/api/papers/questions/list/'+this.$route.params.id,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.token}`
+                        }
+                    }
+                ).then((response)=>{
                     // console.log(response);
                     this.list = response.data
                     console.log(this.list);
@@ -124,7 +138,13 @@ import Swal from 'sweetalert2';
 
             },
             deleteQuestion(id){
-                axios.delete('/api/papers/questions/delete/'+id).then((response)=>{
+                axios.delete('/api/papers/questions/delete/'+id,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${this.token}`
+                        }
+                    }
+                ).then((response)=>{
                     Swal.fire(
                         'Deleted!',
                         response.data.message,

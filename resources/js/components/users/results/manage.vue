@@ -68,15 +68,21 @@ export default {
       user_id : null,
       list : [],
       loading : false,
+      token : localStorage.getItem('token')
     }
   },
   mounted() {
+    this.token = localStorage.getItem('token')
     this.user_id = JSON.parse(this.loged_in_user).id
     this.fecthData();
   },
   methods: {
     fecthData(){
-      axios.get('/api/users/exams/results/'+this.user_id)
+      axios.get('/api/users/exams/results/'+this.user_id,{
+        headers: {
+          'Authorization': `Bearer ${this.token}`
+        }
+      })
       .then(res => {
         this.list = res.data.data
         console.log(this.list);

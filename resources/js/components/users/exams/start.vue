@@ -75,19 +75,23 @@
         data() {
             return {
                 id: this.$route.params.id,
-                questions : []
+                questions : [],
+                token : localStorage.getItem('token')
             };
         },
         mounted() {
+            this.token = localStorage.getItem('token')
             this.initializeSelect2();
             this.getQuestion();
-
-            console.log(this.questions);
         },
 
         methods: {
             getQuestion(){
-                axios.get('/api/users/exam/'+this.id+'/questions')
+                axios.get('/api/users/exam/'+this.id+'/questions',{
+                    headers: {
+                        Authorization: `Bearer ${this.token}`
+                    }
+                })
                 .then((response)=>{
                     response.data.forEach(element => {
                         let opts = [];
@@ -147,6 +151,11 @@
                     {
                         id: this.id,
                         questions : this.questions
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.token}`
+                        }
                     }
                 )
                 .then((response)=>{

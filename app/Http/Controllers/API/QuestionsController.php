@@ -20,7 +20,7 @@ class QuestionsController extends Controller
         // $request->questions is array of questions with answers add all
         // return response()->json($request->all());
         try {
-            foreach($request->all() ?? [] as $key => $question) {
+            foreach($request->questions ?? [] as $key => $question) {
                 $quiz = new ExameQuestion();
                 $quiz->question = $question['question'];
                 $quiz->paper_id = $question['paper_id'];
@@ -57,7 +57,7 @@ class QuestionsController extends Controller
 
     public function update(Request $request, $id)
     {
-        foreach($request->all() ?? [] as $key => $ques) {
+        foreach($request->questions ?? [] as $key => $ques) {
             $question = ExameQuestion::find($id);
             $question->question = $ques['question'];
             $question->question_type = $ques['question_type'];

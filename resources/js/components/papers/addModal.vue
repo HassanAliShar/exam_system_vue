@@ -51,11 +51,13 @@ import toastr from 'toastr';
                 subjects : [],
                 showAddModal: false,
                 isModalOpen: false,
-                modalId: null
+                modalId: null,
+                token : localStorage.getItem('token')
             }
         },
 
         mounted() {
+            this.token = localStorage.getItem('token')
             $('#show-modal').on('click',function(){
                     $('#addModal').modal('show')
                 }
@@ -70,6 +72,10 @@ import toastr from 'toastr';
                 axios.post('/api/papers/add', {
                     name: this.item.name,
                     subject_id: this.item.subject_id
+                },{
+                    headers: {
+                        'Authorization': `Bearer ${this.token}`
+                    }
                 }).then((response)=>{
                     this.name = '';
                     // show toastr success message
@@ -103,7 +109,13 @@ import toastr from 'toastr';
             },
 
             getSubjects(){
-                axios.get('/api/subjects/list').then((response)=>{
+                axios.get('/api/subjects/list',
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${this.token}`
+                        }
+                    }
+                ).then((response)=>{
                     this.subjects = response.data
                 })
             }

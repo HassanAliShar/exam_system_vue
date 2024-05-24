@@ -63,9 +63,11 @@ import Swal from 'sweetalert2';
                 name: 'Hassan',
                 list : [],
                 loading : false,
+                token : localStorage.getItem('token')
             }
         },
         mounted() {
+            this.token = localStorage.getItem('token')
             this.fecthData();
         },
 
@@ -74,7 +76,11 @@ import Swal from 'sweetalert2';
         },
         methods:{
             fecthData(){
-                axios.get('/api/users/list').then((response)=>{
+                axios.get('/api/users/list',{
+                    headers: {
+                        'Authorization': `Bearer ${this.token}`
+                    }
+                }).then((response)=>{
                     // console.log(response);
                     this.list = response.data
 
@@ -85,7 +91,11 @@ import Swal from 'sweetalert2';
 
             },
             deleteUser(id){
-                axios.delete('/api/users/delete/'+id).then((response)=>{
+                axios.delete('/api/users/delete/'+id,{
+                    headers: {
+                        'Authorization': `Bearer ${this.token}`
+                    }
+                }).then((response)=>{
                     // show sweetalert message
                     Swal.fire(
                         'Deleted!',

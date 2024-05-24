@@ -87,9 +87,11 @@
                 passing_marks: '',
                 papers : [],
                 paper_id : '',
+                token : localStorage.getItem('token')
             };
         },
         mounted() {
+            this.token = localStorage.getItem('token')
             this.getExams();
             this.getPaper();
         },
@@ -105,6 +107,10 @@
                     marked_attempts : 0,
                     total_marks :this.total_marks,
                     passing_marks: this.passing_marks
+                },{
+                    headers: {
+                        'Authorization': `Bearer ${this.token}`
+                    }
                 })
                 .then((response)=>{
                     toastr.success(response.data.message);
@@ -114,7 +120,11 @@
             },
 
             getPaper(){
-                axios.get('/api/exams/'+this.id)
+                axios.get('/api/exams/'+this.id,{
+                    headers: {
+                        'Authorization': `Bearer ${this.token}`
+                    }
+                })
                 .then((response)=>{
                     console.log(response.data);
                     this.from_date = response.data.from_date;
@@ -128,7 +138,11 @@
 
             getExams(){
                 console.log("Get Papers is called");
-                axios.get('/api/papers/list')
+                axios.get('/api/papers/list',{
+                    headers: {
+                        'Authorization': `Bearer ${this.token}`
+                    }
+                })
                 .then((response)=>{
                     this.papers = response.data
                 })

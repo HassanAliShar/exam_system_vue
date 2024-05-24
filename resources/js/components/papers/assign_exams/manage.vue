@@ -71,15 +71,21 @@ export default {
     return {
       list: [],
       loading: false,
+      token : localStorage.getItem('token')
     };
   },
   mounted() {
+    this.token = localStorage.getItem('token');
     this.fetchData();
   },
   methods: {
     async fetchData() {
       try {
-        const response = await axios.get('/api/exams/list');
+        const response = await axios.get('/api/exams/list',{
+          headers: {
+            'Authorization': `Bearer ${this.token}`
+          }
+        });
         this.list = response.data.map(item => ({
           ...item,
           satus: item.status // Initialize the toggle state
@@ -92,7 +98,11 @@ export default {
     },
     async deleteExam(id) {
       try {
-        await axios.delete(`/api/exams/delete/${id}`);
+        await axios.delete(`/api/exams/delete/${id}`,{
+          headers: {
+            'Authorization': `Bearer ${this.token}`
+          }
+        });
         Swal.fire('Deleted!', 'Subject has been deleted.', 'success');
         this.fetchData();
       } catch (error) {
@@ -105,6 +115,10 @@ export default {
       console.log(status);
       axios.post(`/api/exams/status/${this.list[index].id}`, {
         status: status
+      }, {
+        headers: {
+          'Authorization': `Bearer ${this.token}`
+        }
       }).then((response)=>{
         console.log(response);
         toastr.success(response.data.message);

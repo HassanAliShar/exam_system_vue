@@ -112,10 +112,12 @@
         data() {
             return {
                 id: this.$route.params.id,
-                questions : []
+                questions : [],
+                token : localStorage.getItem('token')
             };
         },
         mounted() {
+            this.token = localStorage.getItem('token')
             this.initializeSelect2();
             this.getQuestion();
 
@@ -144,7 +146,13 @@
             },
 
             getQuestion(){
-                axios.get('/api/papers/questions/edit/'+this.id)
+                axios.get('/api/papers/questions/edit/'+this.id,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.token}`
+                        }
+                    }
+                )
                 .then((response)=>{
                     let ans;
                     let opts = [];
@@ -222,7 +230,14 @@
 
             UpdateData(){
                 axios.post('/api/papers/questions/update/'+this.id,
-                    this.questions
+                {
+                    questions : this.questions
+                },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.token}`
+                        }
+                    }
                 )
                 .then((response)=>{
                     toastr.success(response.data.message);

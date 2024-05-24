@@ -75,19 +75,24 @@ export default {
         return {
             id: this.$route.params.id,
             result: null,
+            token : localStorage.getItem('token')
         };
     },
 
     mounted() {
+        this.token = localStorage.getItem('token')
         this.getResult();
     },
 
     methods: {
         getResult() {
-            axios.get(`/api/users/exams/results/single/${this.id}`)
+            axios.get(`/api/users/exams/results/single/${this.id}`,{
+                headers: {
+                    Authorization: `Bearer ${this.token}`
+                }
+            })
                 .then((response) => {
                     this.result = response.data.data;
-                    console.log('Result fetched:', this.result);
                 })
                 .catch((error) => {
                     console.error('Error fetching result:', error);
