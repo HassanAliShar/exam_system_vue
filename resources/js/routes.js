@@ -9,6 +9,9 @@ import UserDashboard from './components/dashboard/user.vue';
 import UserExams from './components/users/exams/manage.vue';
 import UserExamStart from './components/users/exams/start.vue';
 
+import UserExamResultView from './components/users/results/view.vue';
+import UserExamResults from './components/users/results/manage.vue';
+
 import SubjectIndex from './components/subjects/manage.vue';
 import PapersIndex from './components/papers/manage.vue';
 
@@ -54,9 +57,21 @@ const routes = [
         meta: { requiresAuth: true }
     },
     {
-        path: '/users/exams/start',
+        path: '/users/exams/start/:id',
         component: UserExamStart,
         name: 'user_exams_start',
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/users/exams/results',
+        component: UserExamResults,
+        name: 'user_exams_results',
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/users/exams/result-view/:id',
+        component: UserExamResultView,
+        name: 'user_exams_result_view',
         meta: { requiresAuth: true }
     },
     {

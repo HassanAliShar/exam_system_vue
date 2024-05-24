@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ExamAssign;
 use App\Models\AssignExam;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -29,8 +31,14 @@ class UserController extends Controller
             'attempt' => 'required',
         ]);
         if($validator){
-            AssignExam::create($request->all());
-            return response()->json($request->all());
+            $created_exam = AssignExam::create($request->all());
+            $exam = AssignExam::with('user')->with('paper')->find($created_exam->id);
+            Mail::to($exam->user->email)->send(new ExamAssign($exam));
+            return response([
+                'status' => 200,
+                'message' => 'Exam created successfully',
+                'data' => $exam
+            ]);
         }
         else{
             return response()->json($validator->errors());

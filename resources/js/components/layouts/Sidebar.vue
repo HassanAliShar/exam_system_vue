@@ -94,7 +94,7 @@
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/users/results" class="nav-link">
+                        <router-link to="/users/exams/results" class="nav-link">
                             <i class="nav-icon fas fa-pen"></i>
                             <p>
                                 Results

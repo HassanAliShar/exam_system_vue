@@ -41,8 +41,11 @@
                       <td>{{ item.passing_marks }}</td>
                       <td>{{ item.from_date }}</td>
                       <td>
-                        <span class="badge badge-success" v-if="item.status && formattedDateTime >= item.from_date && formattedDateTime <= item.to_date">
+                        <span class="badge badge-success" v-if="item.status == '0' && formattedDateTime >= item.from_date && formattedDateTime <= item.to_date">
                             Ready
+                        </span>
+                        <span class="badge badge-success" v-if="item.status == '1' && formattedDateTime >= item.from_date && formattedDateTime <= item.to_date">
+                            Completed
                         </span>
                         <span class="badge badge-danger" v-if="item.status && formattedDateTime > item.from_date && formattedDateTime > item.to_date">
                             Expired
@@ -52,7 +55,7 @@
                         </span>
                       </td>
                       <td>
-                        <router-link v-if="formattedDateTime >= item.from_date && formattedDateTime <= item.to_date" :to="'/users/exams/start'" class="btn btn-info mr-2">Start Exam</router-link>
+                        <router-link v-if="item.status == '0' && formattedDateTime >= item.from_date && formattedDateTime <= item.to_date" :to="'/users/exams/start/'+item.id" class="btn btn-info mr-2">Start Exam</router-link>
                         <!-- <button class="btn btn-danger mr-2" @click="deleteExam(item.id)">Delete</button> -->
                       </td>
                     </tr>
@@ -92,6 +95,7 @@ export default {
           ...item,
           satus: item.status // Initialize the toggle state
         }));
+        console.log(this.list);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {

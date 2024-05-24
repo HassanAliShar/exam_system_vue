@@ -38,14 +38,15 @@
                                         </div>
                                         <div class="col-md-12" v-else>
                                             <div class="row options" id="">
-                                                <div class="form-group col-md-3" v-for="(opt, i) in questions[index].options" :key="i">
-                                                    <input type="checkbox" required v-model="questions[index].answers[i]" :value="i+1" :id="index+'_'+i+1">
+                                                <div class="form-group col-md-3" v-for="i in questions[index].options.length" :key="i">
+                                                    <input type="checkbox" required v-model="questions[index].answers"
+                                                    :value="i"
+                                                    :id="index+'_'+i+1">
                                                     &nbsp; &nbsp;
-                                                    <label v-if="i == 0" :for="index+'_'+i+1"><span class="badge badge-primary p-2">A</span> {{ questions[index].options[i].opt }}</label>
-                                                    <label v-if="i == 1" :for="index+'_'+i+1"><span class="badge badge-primary p-2">B</span> {{ questions[index].options[i].opt }}</label>
-                                                    <label v-if="i == 2" :for="index+'_'+i+1"><span class="badge badge-primary p-2">C</span> {{ questions[index].options[i].opt }}</label>
-                                                    <label v-if="i == 3" :for="index+'_'+i+1"><span class="badge badge-primary p-2">D</span> {{ questions[index].options[i].opt }}</label>
-
+                                                    <label v-if="i == 1" :for="index+'_'+i+1"><span class="badge badge-primary p-2">A</span> {{ questions[index].options[i-1].opt }}</label>
+                                                    <label v-if="i == 2" :for="index+'_'+i+1"><span class="badge badge-primary p-2">B</span> {{ questions[index].options[i-1].opt }}</label>
+                                                    <label v-if="i == 3" :for="index+'_'+i+1"><span class="badge badge-primary p-2">C</span> {{ questions[index].options[i-1].opt }}</label>
+                                                    <label v-if="i == 4" :for="index+'_'+i+1"><span class="badge badge-primary p-2">D</span> {{ questions[index].options[i-1].opt }}</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -54,7 +55,7 @@
                                     <!-- questions end here  -->
                                 </div>
                                 <div class="col-md-12">
-                                    <button v-if="questions.length > 0" class="btn btn-primary float-right" @click="UpdateData">Update</button>
+                                    <button v-if="questions.length > 0" class="btn btn-primary float-right" @click="SaveExam">Update</button>
                                 </div>
                             </div>
                         </div>
@@ -85,37 +86,11 @@
         },
 
         methods: {
-            addQuestions(){
-                this.questions.push({
-                    question : '',
-                    paper_id : this.id,
-                    options : [
-                        {
-                            opt : ''
-                        },
-                        {
-                            opt : ''
-                        }
-                    ],
-                    choice : '',
-                    question_type : '',
-                    answer : '',
-                    answers : [],
-                    marks : ''
-                });
-            },
-
             getQuestion(){
-                axios.get('/api/papers/questions/list/3')
+                axios.get('/api/users/exam/'+this.id+'/questions')
                 .then((response)=>{
                     response.data.forEach(element => {
-                        let ans;
                         let opts = [];
-                        if(element.question_type == 'single'){
-                            ans = element.answer;
-                        }else{
-                            ans = element.answer.split(',');
-                        }
                         // console.log( typeof ans);
                         if(element.option1 != null){
                             opts.push(
@@ -147,12 +122,13 @@
                         }
                         this.questions.push({
                             question : element.question,
+                            id : element.id,
                             paper_id : element.paper_id,
                             choice : element.choice,
                             options : opts,
                             question_type : element.question_type,
-                            answer :  typeof ans != 'object' ? ans : null,
-                            answers : typeof ans == 'object' ? ans : [],
+                            answer :  null,
+                            answers : [],
                             marks : element.marks
                         });
                     });
@@ -166,12 +142,16 @@
                 });
             },
 
-            UpdateData(){
-                axios.post('/api/papers/questions/update/'+this.id,
-                    this.questions
+            SaveExam(){
+                axios.post('/api/users/exam/submit',
+                    {
+                        id: this.id,
+                        questions : this.questions
+                    }
                 )
                 .then((response)=>{
                     toastr.success(response.data.message);
+                    this.$router.push({ name: 'user_exams_result_view' ,params: { id: response.data.data.id } });
                     // this.questions = [];
                 })
             }

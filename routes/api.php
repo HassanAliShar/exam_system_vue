@@ -52,6 +52,11 @@ Route::post('/exams/status/{id}', [\App\Http\Controllers\API\ExamsController::cl
 Route::post('/exams/update/', [\App\Http\Controllers\API\ExamsController::class, 'update']);
 Route::delete('/exams/delete/{id}', [\App\Http\Controllers\API\ExamsController::class, 'destroy']);
 Route::get('/users/exam/{id}', [\App\Http\Controllers\API\ExamsController::class, 'get_user_exams']);
+Route::get('/users/exam/{id}/questions', [\App\Http\Controllers\API\ExamsController::class, 'get_user_exams_questions']);
+Route::get('/users/exams/results/single/{id}', [\App\Http\Controllers\API\ExamsController::class, 'get_user_results']);
+Route::get('/users/exams/results/{id}', [\App\Http\Controllers\API\ExamsController::class, 'exams_results']);
+
+Route::post('/users/exam/submit', [\App\Http\Controllers\API\ExamsController::class, 'save_exams']);
 
 // Route::get('/products/list', [\App\Http\Controllers\ProductController::class, 'index']);
 // Route::post('/products/add', [\App\Http\Controllers\ProductController::class, 'store']);

@@ -86,7 +86,7 @@ export default {
                     localStorage.setItem('token', response.data.token)
                     localStorage.setItem('user', JSON.stringify(response.data.user))
                     toastr.success(response.data.message)
-                    this.$router.push({ name: 'user_dashboard' })
+                    this.$router.push({ name: 'login' })
                 }).catch((error) => {
                     // toastr.error(error.response.data.message.email)
                     console.log(error)

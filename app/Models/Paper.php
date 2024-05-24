@@ -14,10 +14,14 @@ class Paper extends Model
         'subject_id'
     ];
 
-    // public function questions()
-    // {
-    //     return $this->hasMany(Question::class);
-    // }
+    public function questions()
+    {
+        return $this->hasMany(ExameQuestion::class);
+    }
+
+    public function question(){
+        return $this->hasOne(ExameQuestion::class);
+    }
 
     public function subject(){
         return $this->belongsTo(Subject::class, 'subject_id');
