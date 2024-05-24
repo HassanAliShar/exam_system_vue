@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div id="forwardedContent"></div>
+    <script>
+        // JavaScript code to retrieve the forwarded content and display it in the destination page
+        document.addEventListener('DOMContentLoaded', function() {
+          var forwardedContent = localStorage.getItem('forwardedContent'); // Retrieve the content from localStorage
+          document.getElementById('forwardedContent').innerHTML = forwardedContent; // Display the content
+          localStorage.removeItem('forwardedContent'); // Optional: Clear the forwarded content from localStorage
+        });
+        window.addEventListener("load", window.print());
+    </script>
+</body>
+</html>
