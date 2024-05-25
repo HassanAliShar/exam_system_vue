@@ -82,9 +82,10 @@
                                 </div>
                                 <!-- ./col -->
                             </div>
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-12">
-                                    <div v-if="notification.length > 0">                                        <h3>Notifications</h3>
+                                    <div v-if="notification.length > 0">
+                                        <h3>Notifications</h3>
                                         <ul>
                                             <li v-for="notify in notification" :key="notify.id">
                                                 {{ notify.data.message }}
@@ -92,7 +93,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -120,7 +121,7 @@ export default {
         this.token = localStorage.getItem('token');
         this.user_id = JSON.parse(this.user).id
         this.getUserDashboard();
-        this.getUserNotification();
+        // this.getUserNotification();
     },
     methods: {
         getUserDashboard() {
