@@ -21,6 +21,10 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
+    Route::get('/admin/dashboard', [\App\Http\Controllers\API\DashboardController::class, 'index']);
+    Route::get('/user/dashboard/{id}', [\App\Http\Controllers\API\DashboardController::class, 'get_user_dashboard']);
+
+
     Route::get('/subjects/list', [\App\Http\Controllers\API\SubjectsController::class, 'index']);
     Route::post('/subjects/add', [\App\Http\Controllers\API\SubjectsController::class, 'store']);
     Route::get('/subjects/edit/{id}', [\App\Http\Controllers\API\SubjectsController::class, 'edit']);

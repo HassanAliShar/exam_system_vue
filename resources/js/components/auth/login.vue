@@ -83,6 +83,7 @@ export default {
                         this.$router.push({ name: 'admin_dashboard' })
                     }
                     else {
+                        toastr.success('User Logged In Successfully')
                         this.$router.push({ name: 'user_dashboard' })
                     }
 

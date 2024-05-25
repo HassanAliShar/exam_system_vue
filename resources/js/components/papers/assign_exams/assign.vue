@@ -97,6 +97,15 @@
 
         methods: {
             SaveData(){
+                // show loading sweetalert
+                Swal.fire({
+                    title: 'Loading...',
+                    text: 'Please wait while adding new paper',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
                 axios.post('/api/users/assign_exams/add',{
                     from_date: this.from_date,
                     to_date:this.to_date,
@@ -117,8 +126,11 @@
                     this.attempts = '';
                     this.total_marks = '';
                     this.passing_marks = '';
+                    Swal.close();
                     toastr.success(response.data.message);
                     this.questions = [];
+                }).catch((error)=>{
+                    Swal.close();
                 })
             },
 

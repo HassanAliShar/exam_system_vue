@@ -27,6 +27,7 @@
                       <th>Marks</th>
                       <th>Passing Marks</th>
                       <th>Exam Date</th>
+                      <th>Remaining Attempts</th>
                       <th>Status</th>
                       <th>Action</th>
                     </tr>
@@ -40,17 +41,18 @@
                       <td>{{ item.total_marks }}</td>
                       <td>{{ item.passing_marks }}</td>
                       <td>{{ item.from_date }}</td>
+                      <td>{{ item.attempt }}</td>
                       <td>
                         <span class="badge badge-success" v-if="item.status == '0' && formattedDateTime >= item.from_date && formattedDateTime <= item.to_date">
                             Ready
                         </span>
-                        <span class="badge badge-success" v-if="item.status == '1' && formattedDateTime >= item.from_date && formattedDateTime <= item.to_date">
+                        <span class="badge badge-success" v-if="item.status == '1' && formattedDateTime >= item.from_date && formattedDateTime >= item.to_date">
                             Completed
                         </span>
-                        <span class="badge badge-danger" v-if="item.status && formattedDateTime > item.from_date && formattedDateTime > item.to_date">
+                        <span class="badge badge-danger" v-if="item.status != '1' && formattedDateTime > item.from_date && formattedDateTime > item.to_date">
                             Expired
                         </span>
-                        <span class="badge badge-info" v-if="item.status && formattedDateTime < item.from_date && formattedDateTime < item.to_date">
+                        <span class="badge badge-info" v-if="item.status == '0' && formattedDateTime < item.from_date && formattedDateTime < item.to_date">
                             Up Coming
                         </span>
                       </td>

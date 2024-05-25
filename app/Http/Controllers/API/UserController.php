@@ -33,7 +33,8 @@ class UserController extends Controller
         if($validator){
             $created_exam = AssignExam::create($request->all());
             $exam = AssignExam::with('user')->with('paper')->find($created_exam->id);
-            Mail::to($exam->user->email)->send(new ExamAssign($exam));
+
+            Mail::to($exam->user->email)->queue(new ExamAssign($exam));
             return response([
                 'status' => 200,
                 'message' => 'Exam created successfully',

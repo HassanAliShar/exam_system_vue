@@ -147,6 +147,14 @@
             },
 
             SaveExam(){
+                Swal.fire({
+                    title: 'Loading...',
+                    text: 'Please wait while adding new paper',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
                 axios.post('/api/users/exam/submit',
                     {
                         id: this.id,
@@ -162,6 +170,10 @@
                     toastr.success(response.data.message);
                     this.$router.push({ name: 'user_exams_result_view' ,params: { id: response.data.data.id } });
                     // this.questions = [];
+                    Swal.close();
+                }).catch((error)=>{
+                    console.log(error);
+                    Swal.close();
                 })
             }
         }

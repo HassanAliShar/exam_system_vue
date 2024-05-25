@@ -177,7 +177,7 @@ class ExamsController extends Controller
                 ]);
             }
             $user = $exam->user;
-            Mail::to($user->email)->send(new ExamSubmitted($result));
+            Mail::to($user->email)->queue(new ExamSubmitted($result));
             DB::commit();
             return response()->json([
                 'status' => 200,
