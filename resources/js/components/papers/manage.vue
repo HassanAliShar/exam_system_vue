@@ -96,6 +96,22 @@ import Swal from 'sweetalert2';
                     this.local_paper_name = response.data.name;
                     this.paper_id = response.data.id
                     $('#editModal').modal('show')
+                }).catch((error)=>{
+                    console.log(error);
+                    if (error.response) {
+                        const messages = error.response.data.message;
+                        if (messages && typeof messages === 'object') {
+                            Object.values(messages).forEach((messageArray) => {
+                            messageArray.forEach((message) => {
+                                toastr.error(message);
+                            });
+                            });
+                        } else {
+                            toastr.error(messages);
+                        }
+                    } else {
+                        toastr.error('An error occurred. Please try again later.');
+                    }
                 })
             },
 

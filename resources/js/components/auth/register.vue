@@ -1,5 +1,5 @@
 <template>
-    <div class="login-box m-auto">
+    <div class="login-box m-auto mt-5">
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
@@ -35,19 +35,11 @@
                     </div>
                     </div>
                     <div class="row">
-                    <div class="col-12 mb-3">
-                        <div class="icheck-primary">
-                        <input type="checkbox" name="remember" id="remember">
-                        <label for="remember">
-                            Remember Me
-                        </label>
+                        <!-- /.col -->
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-dark btn-block">Register</button>
                         </div>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-dark btn-block">Register</button>
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
                     </div>
                 </form>
                 <!-- /.social-auth-links -->
@@ -88,8 +80,20 @@ export default {
                     toastr.success(response.data.message)
                     this.$router.push({ name: 'login' })
                 }).catch((error) => {
-                    // toastr.error(error.response.data.message.email)
-                    console.log(error)
+                    if (error.response) {
+                        const messages = error.response.data.message;
+                        if (messages && typeof messages === 'object') {
+                            Object.values(messages).forEach((messageArray) => {
+                            messageArray.forEach((message) => {
+                                toastr.error(message);
+                            });
+                            });
+                        } else {
+                            toastr.error(messages);
+                        }
+                    } else {
+                        toastr.error('An error occurred. Please try again later.');
+                    }
                 })
             }
             else {

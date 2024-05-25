@@ -27,19 +27,11 @@
                     </div>
                     </div>
                     <div class="row">
-                    <div class="col-12 mb-3">
-                        <div class="icheck-primary">
-                        <input type="checkbox" name="remember" id="remember">
-                        <label for="remember">
-                            Remember Me
-                        </label>
+                        <!-- /.col -->
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-dark btn-block">LogIn</button>
                         </div>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-dark btn-block">LogIn</button>
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
                     </div>
                 </form>
                 <!-- /.social-auth-links -->
@@ -77,18 +69,40 @@ export default {
                     email: this.email,
                     password: this.password
                 }).then((response) => {
-                    localStorage.setItem('token', response.data.token)
-                    localStorage.setItem('user', JSON.stringify(response.data.user))
-                    if (response.data.user.role == 'admin') {
-                        this.$router.push({ name: 'admin_dashboard' })
+                    localStorage.removeItem('token')
+                    localStorage.removeItem('user')
+                    localStorage.removeItem('notifications')
+                    if(response.data.success){
+                        localStorage.setItem('token', response.data.token)
+                        localStorage.setItem('user', JSON.stringify(response.data.user))
+                        if (response.data.user.role_id == '1') {
+                            this.$router.push({ name: 'admin_dashboard' })
+                        }
+                        else {
+                            toastr.success('User Logged In Successfully')
+                            this.$router.push({ name: 'user_dashboard' })
+                        }
                     }
-                    else {
-                        toastr.success('User Logged In Successfully')
-                        this.$router.push({ name: 'user_dashboard' })
+                    else{
+                        toastr.error(response.data.message)
                     }
 
                 }).catch((error) => {
-                    console.log(error)
+                    if (error.response) {
+                        const messages = error.response.data.message;
+                        if (messages && typeof messages === 'object') {
+                            Object.values(messages).forEach((messageArray) => {
+                            messageArray.forEach((message) => {
+                                toastr.error(message);
+                            });
+                            });
+                        } else {
+                            toastr.error(messages);
+                        }
+                    } else {
+                        toastr.error('An error occurred. Please try again later.');
+                    }
+
                 })
             }
             else {

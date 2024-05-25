@@ -121,7 +121,7 @@ export default {
         this.token = localStorage.getItem('token');
         this.user_id = JSON.parse(this.user).id
         this.getUserDashboard();
-        // this.getUserNotification();
+        this.getUserNotification();
     },
     methods: {
         getUserDashboard() {
@@ -145,8 +145,9 @@ export default {
                     'Authorization': `Bearer ${this.token}`
                 }
             }).then((response) => {
-                console.log(response.data);
                 this.notification = response.data
+                localStorage.removeItem('notifications');
+                localStorage.setItem('notifications', JSON.stringify(this.notification))
             })
         }
     }
