@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/admin/dashboard', [\App\Http\Controllers\API\DashboardController::class, 'index']);
     Route::get('/user/dashboard/{id}', [\App\Http\Controllers\API\DashboardController::class, 'get_user_dashboard']);
+    Route::get('/user/notification/{id}', [\App\Http\Controllers\API\DashboardController::class, 'getUserNOtification']);
 
 
     Route::get('/subjects/list', [\App\Http\Controllers\API\SubjectsController::class, 'index']);

@@ -51,7 +51,7 @@ class DashboardController extends Controller
                     'upcoming_exams' => $upcoming_exams ?? 0,
                     'assigned_exams' => $assigned_exams ?? 0,
                     'expired_exams' => $expired_exams ?? 0,
-                    'given_exams' => $given_exams ?? 0,
+                    'given_exams' => $given_exams ?? 0
                 ]
             );
         } catch (\Throwable $th) {
@@ -60,5 +60,11 @@ class DashboardController extends Controller
                 'message' => $th->getMessage()
             ]);
         }
+    }
+
+    public function getUserNOtification($id){
+        $user = User::findOrFail($id);
+        $notifications = $user->notifications()->get();
+        return response()->json($notifications);
     }
 }

@@ -31,9 +31,9 @@
                                         <p>Total Exams </p>
                                     </div>
                                     <div class="icon">
-                                        <i class="ion ion-person-add"></i>
+                                        <i class="ion ion-edit"></i>
                                     </div>
-                                    <router-link to="/users/manage" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></router-link>
+                                    <router-link to="/users/exams" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></router-link>
                                     </div>
                                 </div>
                                 <!-- ./col -->
@@ -46,9 +46,9 @@
                                         <p>UpComing Exams</p>
                                     </div>
                                     <div class="icon">
-                                        <i class="ion ion-stats-bars"></i>
+                                        <i class="ion ion-calendar"></i>
                                     </div>
-                                    <router-link to="/papers" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></router-link>
+                                    <router-link to="/users/exams" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></router-link>
                                     </div>
                                 </div>
                                 <!-- ./col -->
@@ -61,9 +61,9 @@
                                         <p>Expired Exams</p>
                                     </div>
                                     <div class="icon">
-                                        <i class="ion ion-bag"></i>
+                                        <i class="ion ion-clock"></i>
                                     </div>
-                                    <router-link to="/users/papers" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></router-link>
+                                    <router-link to="/users/exams" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></router-link>
                                     </div>
                                 </div>
                                 <!-- ./col -->
@@ -75,12 +75,23 @@
                                         <p>Given Exams</p>
                                     </div>
                                     <div class="icon">
-                                        <i class="ion ion-pie-graph"></i>
+                                        <i class="ion ion-checkmark"></i>
                                     </div>
-                                    <router-link to="/subject" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></router-link>
+                                    <router-link to="/users/exams" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></router-link>
                                     </div>
                                 </div>
                                 <!-- ./col -->
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div v-if="notification.length > 0">                                        <h3>Notifications</h3>
+                                        <ul>
+                                            <li v-for="notify in notification" :key="notify.id">
+                                                {{ notify.data.message }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -102,12 +113,14 @@ export default {
             given_exams : 0,
             user : localStorage.getItem('user'),
             user_id : null,
+            notification : []
         }
     },
     mounted() {
         this.token = localStorage.getItem('token');
         this.user_id = JSON.parse(this.user).id
         this.getUserDashboard();
+        this.getUserNotification();
     },
     methods: {
         getUserDashboard() {
@@ -121,6 +134,18 @@ export default {
                 this.upcoming_exams = response.data.upcoming_exams ?? 0,
                 this.expired_exams = response.data.expired_exams ?? 0,
                 this.given_exams = response.data.given_exams ?? 0
+            })
+
+        },
+
+        getUserNotification() {
+            axios.get('/api/user/notification/'+this.user_id, {
+                headers: {
+                    'Authorization': `Bearer ${this.token}`
+                }
+            }).then((response) => {
+                console.log(response.data);
+                this.notification = response.data
             })
         }
     }

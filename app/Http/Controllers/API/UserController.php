@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\ExamAssign;
 use App\Models\AssignExam;
 use App\Models\User;
+use App\Notifications\PaperAssignedNotification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -34,6 +35,7 @@ class UserController extends Controller
             $created_exam = AssignExam::create($request->all());
             $exam = AssignExam::with('user')->with('paper')->find($created_exam->id);
 
+            $exam->user->notify(new PaperAssignedNotification($exam));
             Mail::to($exam->user->email)->queue(new ExamAssign($exam));
             return response([
                 'status' => 200,
